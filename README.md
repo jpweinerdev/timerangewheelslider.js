@@ -1,5 +1,5 @@
 # Time Range Wheel Slider (Circular Knob Slider)
-jQuery Plugin for selecting time ranges
+jQuery Plugin for selecting time ranges<br>
 build upon D3.js
 
 
@@ -52,8 +52,8 @@ Parameter | Description
 `handleFillColorEnd` |	color of the end handles inner circle
 `tickColor` |	color of the clock ticks
 `indicatorBackgroundColor` |	color of the indicator circle segment striped background
-`data` |	the initial data object, needs start and end parameter
-`onChange` |	call back function for the selected time values, returns an object with start, end and duration parameters (formated as time string in 24 hour format)
+`data` |	the initial data object<br> needs start and end parameter
+`onChange` |	call back function for the selected time values<br> returns an object with start, end and duration parameters (formated as time string in 24 hour format)
 
 ## Demo
 
