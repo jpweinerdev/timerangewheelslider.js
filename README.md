@@ -53,3 +53,16 @@ Parameter | Description
 `indicatorBackgroundColor` |	color of the indicator circle segment striped background
 `data` |	the initial data object, needs start and end parameter
 `onChange` |	call back function for the selected time values, returns an object with start, end and duration parameters (formated as time string in 24 hour format)
+
+## Demo
+
+See working demo on [developer.jpweiner.net](http://developer.jpweiner.net/timerangewheel.html).
+
+
+## Credits
+
+Built on top of [jQuery Boilerplate](http://jqueryboilerplate.com).
+
+## License
+
+[MIT License](http://zenorocha.mit-license.org/) © Zeno Rocha
