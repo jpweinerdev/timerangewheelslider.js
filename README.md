@@ -6,10 +6,12 @@ jQuery Plugin for selecting time range
 This plugin requires jQuery (&gt;= 1.8.x) and D3.js (v4)<br>Font Awesome (4.4.x) is used for the handles inner icon symbols.
 
 ## Minimal html configuration
-$ &lt;div class=&quot;graph-left&quot;&gt;&lt;/div&gt;
-$ &lt;div id=&quot;knobcontainer&quot;&gt;&lt;/div&gt;
-$ &lt;div class=&quot;graph-right&quot;&gt;&lt;/div&gt;
-$ &lt;div class=&quot;graph-center&quot;&gt;&lt;/div&gt;
+```
+&lt;div class=&quot;graph-left&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;knobcontainer&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;graph-right&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;graph-center&quot;&gt;&lt;/div&gt;
+```
 
 ## jQuery initialization and customization
 This plugin requires jQuery (>= 1.8.x) and D3.js (v4)
@@ -38,6 +40,7 @@ $("#knobcontainer").timerangewheel({
 
 ## Options and parameters
 Parameter | Description
+--- | ---	
 `indicatorWidth` |	width of the indicator circle segment in pixel
 `handleRadius` |	radius of the handles in pixel
 `handleStrokeWidth` |	stroke width of the handle ring in pixel
