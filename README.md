@@ -6,11 +6,11 @@ jQuery Plugin for selecting time range
 This plugin requires jQuery (&gt;= 1.8.x) and D3.js (v4)<br>Font Awesome (4.4.x) is used for the handles inner icon symbols.
 
 ## Minimal html configuration
-```
-&lt;div class=&quot;graph-left&quot;&gt;&lt;/div&gt;
-&lt;div id=&quot;knobcontainer&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;graph-right&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;graph-center&quot;&gt;&lt;/div&gt;
+```html
+<div class="graph-left"></div>
+<div id="knobcontainer"></div>
+<div class="graph-right"></div>
+<div class="graph-center"></div>
 ```
 
 ## jQuery initialization and customization
