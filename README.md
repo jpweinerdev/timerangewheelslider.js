@@ -4,7 +4,7 @@ build upon D3.js
 
 
 ## jQuery initialization and customization
-This plugin requires jQuery (&gt;= 1.8.x) and D3.js (v4)<br>Font Awesome (4.4.x) is used for the handles inner icon symbols.
+This plugin requires jQuery (&gt;= 1.8.x) and D3.js (&gt;= v5.4.0)<br>Font Awesome (4.4.x) is used for the handles inner icon symbols.
 
 ## Minimal html configuration
 ```html
