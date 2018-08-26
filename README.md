@@ -15,7 +15,7 @@ This plugin requires jQuery (&gt;= 1.8.x) and D3.js (&gt;= v5.4.0)<br>Font Aweso
 ```
 
 ## jQuery initialization and customization
-This plugin requires jQuery (>= 1.8.x) and D3.js (v4)
+This plugin requires jQuery (>= 1.8.x) and D3.js (&gt;= v5.4.0)
 Font Awesome (4.4.x) is used for the handles inner icon symbols.
 
 ```
