@@ -1,6 +1,6 @@
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
-;( function( $, window, document, undefined ) {
+;( function( $, window, document, d3, undefined ) {
 
 	"use strict";
 
@@ -78,16 +78,17 @@
 				
 				calculateDuration: function(startAngle, endAngle) {
 					var duration;
-					var angleToSegments = d3.scale.linear().range([0,288]).domain([0,360]); //24 Hours have 288 5 Min. Segments
+					var angleToSegments = d3.scaleLinear().range([0,288]).domain([0,360]); //24 Hours have 288 5 Min. Segments
 					
 					duration = angleToSegments(endAngle) - angleToSegments(startAngle);
-					if(duration < 0) duration = 288 + duration; //288 segmente with 5min
+					if(duration < 0) duration = 288 + duration; //288 segmente mit 5min
 					
 					return this.calculateTimeFromMinutes(duration*5);
 				},
 				
 				createTimeInfoObject: function(data) {
-					var angleToSegments = d3.scale.linear().range([0,288]).domain([0,360]); //24 Hours have 288 5 Min. Segments				
+					var angleToSegments = d3.scaleLinear().range([0,288]).domain([0,360]); //24 Hours have 288 5 Min. Segments
+					//var angleToFiveMinuteScale = d3.scale.linear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments				
 					var startAngle, endAngle, startTimeInfo, endTimeInfo, duration;
 					startTimeInfo = this.calculateTimeFromMinutes(angleToSegments(data.aAngle)*5);
 					endTimeInfo = this.calculateTimeFromMinutes(angleToSegments(data.eAngle)*5);
@@ -98,8 +99,8 @@
 				
 				calculateKnobInitialData: function(initialData) {		
 					var start, end, time, value=0, angle=0, minuteSegments=0;
-					var angleToHours = d3.scale.linear().range([0,360]).domain([0,this.settings.rangeTotal]);
-					var segmentsToAngle = d3.scale.linear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments
+					var angleToHours = d3.scaleLinear().range([0,360]).domain([0,this.settings.rangeTotal]);
+					var segmentsToAngle = d3.scaleLinear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments
 								
 					time = initialData.start.split(":");
 					minuteSegments = time[0]*12; //hours with 5 minutes
@@ -107,7 +108,7 @@
 					angle = segmentsToAngle(minuteSegments);
 					value = angleToHours.invert(angle);
 					
-					this.graphdata.push({value: value, label:'a', angle: angle}); //Start
+					this.graphdata.push({value: value, label:'a', angle: angle}); //Anfang
 					
 					time = initialData.end.split(":");
 					minuteSegments = time[0]*12; //hours with 5 minutes
@@ -121,8 +122,8 @@
 				
 				calculateKnobUpdateHandleData: function(value) {
 					var start, end, time, value=0, angle=0, minuteSegments=0;
-					var angleToHours = d3.scale.linear().range([0,360]).domain([0,this.settings.rangeTotal]);
-					var segmentsToAngle = d3.scale.linear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments
+					var angleToHours = d3.scaleLinear().range([0,360]).domain([0,this.settings.rangeTotal]);
+					var segmentsToAngle = d3.scaleLinear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments
 								
 					time = initialData.start.split(":");
 					minuteSegments = time[0]*12; //hours with 5 minutes
@@ -130,7 +131,7 @@
 					angle = segmentsToAngle(minuteSegments);
 					value = angleToHours.invert(angle);
 					
-					this.graphdata.push({value: value, label:'a', angle: angle}); //Start
+					this.graphdata.push({value: value, label:'a', angle: angle}); //Anfang
 					
 					time = initialData.end.split(":");
 					minuteSegments = time[0]*12; //hours with 5 minutes
@@ -138,13 +139,14 @@
 					angle = segmentsToAngle(minuteSegments);
 					value = angleToHours.invert(angle);
 			
-					this.graphdata.push({value: value, label:'e', angle: angle}); //End
+					this.graphdata.push({value: value, label:'e', angle: angle}); //Ende
 					
 				},
 				
 				getValueOfDataSet: function(label) {
 					var value = 0;
 					this.graphdata.forEach(function(el,i){
+						//console.log(el.label, label, el.value);
 						if(el.label == label) value = el.value;
 					});
 					return value;
@@ -180,11 +182,13 @@
 				var a, e, startAngle, endAngle;					
 				var tmpVal = null; //for 5min intervall buffer
 				
+//https://amdevblog.wordpress.com/2016/07/20/update-d3-js-scripts-from-v3-to-v4/
+				
 
 				//converts angle to total hours (11.083333333333334 -> 11:05 - > 166.25)
-				var angularScale = d3.scale.linear().range([0,360]).domain([0,this.settings.rangeTotal]);
+				var angularScale = d3.scaleLinear().range([0,360]).domain([0,this.settings.rangeTotal]);
 				//converts angle to 5 Min Segments
-				var angleToFiveMinuteScale = d3.scale.linear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments
+				var angleToFiveMinuteScale = d3.scaleLinear().range([0,360]).domain([0,288]); //24 Hours have 288 5 Min. Segments
 				
 
 				var height = this.settings.height, width = this.settings.width, margin = this.settings.margin;			
@@ -196,16 +200,16 @@
 
 
 				var dragmoveHandles = function (d,i) {
-					var activeHandle = d3.select(this).classed('active', true);
+					var activeHandle = d3.select(this).classed('active', true); //selektiert den aktiven handle
 					var coordinates = d3.mouse(_this.graph.svg.node());
 					
-					var x = coordinates[0]-radius;
+					var x = coordinates[0]-radius; //radius = 130 --> 150 - margin!
 					var y = coordinates[1]-radius;
 					
 					var newVal;			
 						
 					
-					// 1 radian = 57.2957795 degree
+					//var newAngle = Math.atan2( y , x )* 57.2957795; // 1 radian = 57.2957795 degree
 					var newAngle = (Math.atan2( y , x )* 180 / Math.PI)+90;					
 
 						
@@ -217,10 +221,13 @@
 					newAngle = newAngle-((newAngle * 100) % 125)/100; //make a stop every 1,25° = 5 Min.
 					
 					
+					//if (!activeHandle.classed('false', true)) 
 					d.value = angularScale.invert(newAngle);
 					d.angle = newAngle.toFixed(2);
-					
-					
+						
+						
+																	
+					//only update handles if new value has been detected AND Situation is NOT ARMED
 					if(d.angle != tmpVal) {
 						tmpVal = d.angle;
 						updateHandles(activeHandle);
@@ -233,7 +240,7 @@
 				//zeichne kreis neu entsprechend daten
 				var updateArc = function (value, id, label, angle) {
 					
-					var handlerContainer = d3.selectAll('#handles .handlercontainer');
+					var handlerContainer = d3.selectAll('#handles .handlercontainer'); //selektiert alle handles
 					var startValue = 0;
 					var endValue = 0;
 					var angleLength = 0;
@@ -260,7 +267,7 @@
 
 
 					//replace arc
-					_this.graph.arc = d3.svg.arc()
+					_this.graph.arc = d3.arc()
 						.innerRadius(innerRadius)
 						.outerRadius(outerRadius)
 						.startAngle(function(d){ return startValue*(Math.PI/180); })
@@ -281,6 +288,9 @@
 					var circles = handlerContainer.enter()
 						.append('g')
 							.attr('class', 'handlercontainer')
+							.attr('transform', function(d){
+								return 'rotate(' + angularScale(d.value) + ') translate(0,' +radius*-1 + ')'; //initial position
+							})
 							.on("mouseover", function(){
 								d3.select(this).classed('active',true);
 							})
@@ -289,27 +299,24 @@
 							})
 							.call(dragBehavior);
 						
-						circles.append('circle').attr({
-							r: _this.settings.handleRadius,
-							'class':'handle'
-						})					
-						.attr('stroke', _this.settings.handleStrokeColor)
-						.attr('stroke-width', _this.settings.handleStrokeWidth)
-						.attr('cursor', 'all-scroll')
-						.attr("fill", function(d, i) { if(d.label == "a") return _this.settings.handleFillColorStart; else return _this.settings.handleFillColorEnd })
-						.attr('id', function(d){ return d.label; })
-						.on("mouseover", function(){
-							d3.select(this).classed('active',true);
-						})
-						.on("mouseout", function(){
-							d3.select(this).classed('active',false);
-						});
-						
-						
-						
+						circles.append('circle')
+							.attr('r', _this.settings.handleRadius)
+							.attr('class', 'handle')							
+							.attr('stroke', _this.settings.handleStrokeColor)
+							.attr('stroke-width', _this.settings.handleStrokeWidth)
+							.attr('cursor', 'all-scroll')
+							.attr('fill', function(d, i) { if(d.label == "a") return _this.settings.handleFillColorStart; else return _this.settings.handleFillColorEnd })
+							.attr('id', function(d){ return d.label; })							
+							.on('mouseover', function(){
+								d3.select(this).classed('active',true);
+							})
+							.on('mouseout', function(){
+								d3.select(this).classed('active',false);
+							});
+
 					
-					
-					handlerContainer.append("text")
+					circles.append("text")
+							//.attr("dx", function(d){return -10})
 							.attr("text-anchor", "middle")
 							.attr('dominant-baseline', 'central')
 							.attr('font-family', 'FontAwesome')
@@ -317,34 +324,25 @@
 							.attr('cursor', 'all-scroll')
 							.attr('fill', _this.settings.handleIconColor)							
 							.text(function(d) { if(d.label == "a") return '\uf054'; else return '\uf053'; }); //http://fontawesome.io/3.2.1/cheatsheet/
-												
 
-					handlerContainer.attr({
-						transform:function(d){
-
-							return 'rotate(' + angularScale(d.value) + ') translate(0,' +radius*-1 + ')'; //initial position
-						}
-					});
-					
 				}
 
 
 				var updateHandles = function (handle){
-					handle.attr({
-						transform:function(d,i){
+					handle.attr('transform', function(d,i){
 							updateArc(d.value, i, d.label, d.angle);
 								
 							return 'rotate(' + angularScale(d.value) + ') translate(0,' +radius*-1 + ')';
-						}
-					});
+						});
 				}
 
 
 				var checkHandlesPosition = function (labelOfDragedHandle) {
-					var allHandles = handles.selectAll('.handlercontainer'); 
+					//var allHandles = handles.selectAll('circle').classed('handle', true);
+					var allHandles = handles.selectAll('.handlercontainer');  //d3.selectAll('#handles .handlercontainer'); //selektiert alle handles //handles.selectAll('g').classed('circle', true);
 					var distanz = 0;
 
-					//a for start, e for end
+					//a for anfang, e for ende
 					var currentData = {
 						"a": 0,
 						"aAngle": 0,
@@ -352,6 +350,7 @@
 						"eAngle": 0
 					}
 					
+					//Ablesen der Daten für Anzeige über HANDLES!!!!!!!!!!!!!!!! nicht über arc!
 					allHandles.each(function (d, i) {
 						currentData[d.label] = d.value;
 						currentData[d.label+"Angle"] = d.angle;
@@ -381,17 +380,15 @@
 				//initial range data on startup
 				this.writeTimeInfo(_this.helper.createTimeInfoObject({a: a, e: e, aAngle: startAngle, eAngle: endAngle}));
 				
-				this.graph.pie = d3.layout.pie().value(function(d,i){
+				this.graph.pie = d3.pie().value(function(d,i){
 					return d.value; 
 				})
 				.sort(null);
 				
 				
 				this.graph.svg = d3.select('.knob').append('svg')
-					.attr({
-						height: this.settings.height+this.settings.offset,
-						width: this.settings.width+this.settings.offset
-					})
+					.attr('height', this.settings.height+this.settings.offset)
+					.attr('width', this.settings.width+this.settings.offset)
 					.append('g')					
 						.attr('id','holder').attr('transform','translate('+(((this.settings.width+this.settings.offset) - this.settings.width)/2 +margin.top)+','+(((this.settings.height+this.settings.offset) - this.settings.height)/2 + margin.left)+')');
 					
@@ -400,14 +397,14 @@
 				ringbgrd = this.graph.svg
 					.append('g')
 					.attr('id','ringbgrd').attr('transform','translate('+radius+','+radius+')');
-				ringbgrd.append('circle').attr({
-					r: radius,
-					'class':'ringbgrd',
-					'stroke-width': this.settings.indicatorWidth-2,
-					'stroke': this.settings.indicatorBackgroundColor,
-					'stroke-dasharray': 2,
-					'fill': 'none'
-				});
+					
+				ringbgrd.append('circle')
+					.attr('r', radius)					
+					.attr('class','ringbgrd')
+					.attr('stroke-width', this.settings.indicatorWidth-2)
+					.attr('stroke', this.settings.indicatorBackgroundColor)
+					.attr('stroke-dasharray', 2)
+					.attr('fill', 'none');
 		
 				
 					
@@ -417,7 +414,7 @@
 					startAngle = (startAngle*1)-360;
 				}
 
-				this.graph.arc = d3.svg.arc()
+				this.graph.arc = d3.arc()
 					.innerRadius(innerRadius)
 					.outerRadius(outerRadius)
 					.startAngle(function(d){ return startAngle*(Math.PI/180); })
@@ -438,10 +435,11 @@
 						.attr('id','handles')
 						.attr('transform','translate('+radius+','+radius+')');
 						
-				dragBehavior = d3.behavior.drag()
-					.origin(function(d) { return d; })
+				dragBehavior = d3.drag()
+					.subject(function(d) { return d; })
 					.on("drag", dragmoveHandles)
-					.on('dragend', function(){ d3.select(this).classed('active',false); });
+					.on("end", function(){ d3.select(this).classed('active',false); });
+					
 
 				
 				
@@ -511,6 +509,8 @@
 			
 			setSettings: function( settings ) {
 				//settind ... defaults
+				//console.log(this.settings);
+				//console.log(settings);
 				this.helper.settings = this.settings;
 			
 			}
@@ -527,4 +527,4 @@
 			} );
 		};
 
-} )( jQuery, window, document );
+} )( jQuery, window, document, d3 );
