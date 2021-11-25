@@ -1,4 +1,4 @@
-# Timerangewheelslider.js
+# TimeRangeWheelSlider
 Time Range Wheel Slider (Circular Knob Slider)<br>
 jQuery Plugin for selecting time ranges<br>
 build upon D3.js
