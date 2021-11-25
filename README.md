@@ -1,7 +1,9 @@
-# Time Range Wheel Slider (Circular Knob Slider)
+# Timerangewheelslider.js
+Time Range Wheel Slider (Circular Knob Slider)
 jQuery Plugin for selecting time ranges<br>
 build upon D3.js
 
+![preview](https://github.com/jpweinerdev/timerangewheelslider.js/blob/master/intro.png)
 
 ## jQuery initialization and customization
 This plugin requires jQuery (&gt;= 1.8.x) and D3.js (&gt;= v5.4.0)<br>Font Awesome (4.4.x) is used for the handles inner icon symbols.
@@ -18,7 +20,7 @@ This plugin requires jQuery (&gt;= 1.8.x) and D3.js (&gt;= v5.4.0)<br>Font Aweso
 This plugin requires jQuery (>= 1.8.x) and D3.js (&gt;= v5.4.0)
 Font Awesome (4.4.x) is used for the handles inner icon symbols.
 
-```
+```javascript
 $("#knobcontainer").timerangewheel({
 	indicatorWidth: 12,
 	handleRadius: 15,
@@ -53,6 +55,10 @@ Parameter | Description
 `tickColor` |	color of the clock ticks
 `indicatorBackgroundColor` |	color of the indicator circle segment striped background
 `data` |	the initial data object<br> needs start and end parameter
+
+## Events
+Parameter | Description
+--- | ---
 `onChange` |	call back function for the selected time values<br> returns an object with start, end and duration parameters (formated as time string in 24 hour format)
 
 ## Demo
